@@ -41,6 +41,24 @@ class Linear():
         #      of the linear layer
         # TODO: Remember to use add_operation to record these operations in
         #      the autograd engine after each operation
-        # TODO: remember to return the computed value
 
-        raise NotImplementedError
+        affine = np.dot(x, self.W.T)
+
+        self.autograd_engine.add_operation(
+            inputs = [x, self.W],
+            output = affine,
+            gradients_to_update = [None, self.dW],
+            backward_operation = matmul_backward
+        )
+
+        affine += self.b.flatten()
+
+        self.autograd_engine.add_operation(
+            inputs = [affine, self.b],
+            output = affine,
+            gradients_to_update = [None, self.db],
+            backward_operation = add_backward
+        )
+
+        # TODO: remember to return the computed value
+        return affine

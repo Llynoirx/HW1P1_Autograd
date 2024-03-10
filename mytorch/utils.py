@@ -21,6 +21,11 @@ class GradientBuffer:
         return self.get_memory_loc(np_array) in self.memory
 
     def add_spot(self, np_array):
+        """
+        Checks if np arr already in buffer memory; if its not, it creates an array of zeros
+        of the proper size to store gradient; if already in memory, asserts existing gradient 
+        is the same shape
+        """
         if not self.is_in_memory(np_array):
             self.memory[self.get_memory_loc(np_array)] = np.zeros(np_array.shape)
         else:
